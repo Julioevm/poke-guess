@@ -35,13 +35,22 @@
                pattern="[A-Za-z]"
                />
       </div>
-      <button type="submit" [disabled]="!!feedback">Guess</button>
+      <div class="guess-action-btns">
+        <button
+          type="button"
+          class="guess-action"
+          (click)="skipPokemon()"
+          [disabled]="!!feedback && feedback === 'Correct!'"
+        >Skip</button>
+        <button
+          *ngIf="showRetrySkip && feedback && feedback !== 'Correct!'"
+          type="button"
+          class="guess-action"
+          (click)="retryGuess()"
+        >Retry</button>
+      </div>
     </form>
     <div class="feedback" [class.correct]="feedback === 'Correct!'" [class.wrong]="feedback && feedback !== 'Correct!'">{{ feedback }}</div>
-    <div *ngIf="showRetrySkip && feedback && feedback !== 'Correct!'" class="retry-skip-btns">
-      <button (click)="retryGuess()">Retry</button>
-      <button (click)="skipPokemon()">Skip</button>
-    </div>
     <button (click)="nextPokemon()" *ngIf="feedback === 'Correct!'">Next</button>
   </div>
 </div>

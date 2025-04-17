@@ -132,8 +132,13 @@ export class GameComponent {
   onLetterKeyDown(idx: number, event: KeyboardEvent) {
     const input = event.target as HTMLInputElement;
     if (event.key === 'Backspace') {
-      // If current input is empty or will be cleared
-      if (!this.guessLetters[idx] || input.selectionStart === 0) {
+      // Always clear the current block first
+      if (!this.clueArray[idx]) {
+        this.guessLetters[idx] = '';
+        input.value = '';
+      }
+      // If current input is empty or will be cleared, move focus
+      if (input.selectionStart === 0) {
         // Find previous editable (non-clue) input
         let prevIdx = idx - 1;
         while (prevIdx >= 0 && this.clueArray[prevIdx]) {
