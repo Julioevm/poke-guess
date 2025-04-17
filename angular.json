@@ -95,6 +95,14 @@
             ],
             "scripts": []
           }
+        },
+        "deploy": {
+          "builder": "@netlify-builder/deploy:deploy",
+          "options": {
+            "outputPath": "dist/poke-guess",
+            "netlifyToken": "nfp_RDDzGQKohNzeKPxnewVSTGUgHyWDaZgg4dc1",
+            "siteId": "be34e35a-749b-427d-baa8-b1098d9ec655"
+          }
         }
       }
     }

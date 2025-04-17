@@ -1,6 +1,8 @@
 [build]
-  command = "npx ng build --configuration=production"
+  command = "ng build --configuration=production"
   publish = "dist/poke-guess/browser"
 
-[context.production.environment]
-  NODE_ENV = "production"
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
