@@ -24,6 +24,7 @@ export class GameComponent {
   feedback: string = '';
   loading = false;
   guessLetters: string[] = [];
+  showRetrySkip = false;
 
   constructor(private pokeService: PokemonService) {
     this.loadPokemonList();
@@ -51,6 +52,11 @@ export class GameComponent {
         if (letter) this.guessLetters[i] = letter.toUpperCase();
       });
     }
+    // Auto-focus first editable input after DOM updates
+    setTimeout(() => {
+      const firstInput = document.querySelector('.guess-blocks input:not([readonly])') as HTMLInputElement;
+      if (firstInput) firstInput.focus();
+    }, 0);
   }
 
   setDifficulty(diff: string) {
@@ -93,6 +99,33 @@ export class GameComponent {
     if (val && input.nextElementSibling) {
       (input.nextElementSibling as HTMLInputElement).focus();
     }
+    // Auto-submit when last non-clue block is filled
+    if (this.isLastInputFilled()) {
+      this.autoSubmitGuess();
+    }
+  }
+
+  // Check if all non-clue blocks are filled
+  isLastInputFilled(): boolean {
+    return this.guessLetters.every((letter, i) => this.clueArray[i] || letter);
+  }
+
+  // Auto-submit guess when last letter is input
+  autoSubmitGuess() {
+    if (!this.currentPokemon) return;
+    const guessStr = this.guessLetters.join('').toLowerCase();
+    if (guessStr === this.currentPokemon.name.toLowerCase()) {
+      this.feedback = 'Correct!';
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+      setTimeout(() => this.nextPokemon(), 1000);
+    } else {
+      this.feedback = 'Try again!';
+      this.showRetrySkip = true;
+    }
   }
 
   // Handle backspace to move focus to previous block unless it's a clue
@@ -118,7 +151,25 @@ export class GameComponent {
     }
   }
 
-  // Update submitGuess to use guessLetters
+  // Retry: clear guess blocks (except clues)
+  retryGuess() {
+    this.guessLetters = this.guessLetters.map((letter, i) => this.clueArray[i] ? letter : '');
+    this.feedback = '';
+    this.showRetrySkip = false;
+    // Focus first editable input
+    setTimeout(() => {
+      const firstInput = document.querySelector('.guess-blocks input:not([readonly])') as HTMLInputElement;
+      if (firstInput) firstInput.focus();
+    }, 0);
+  }
+
+  // Skip: show new pokemon
+  skipPokemon() {
+    this.showRetrySkip = false;
+    this.feedback = '';
+    this.nextPokemon();
+  }
+
   async submitGuess() {
     if (!this.currentPokemon) return;
     const guessStr = this.guessLetters.join('').toLowerCase();
@@ -132,6 +183,7 @@ export class GameComponent {
       setTimeout(() => this.nextPokemon(), 1000);
     } else {
       this.feedback = 'Try again!';
+      this.showRetrySkip = true;
     }
   }
 

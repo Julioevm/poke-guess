@@ -38,6 +38,10 @@
       <button type="submit" [disabled]="!!feedback">Guess</button>
     </form>
     <div class="feedback" [class.correct]="feedback === 'Correct!'" [class.wrong]="feedback && feedback !== 'Correct!'">{{ feedback }}</div>
+    <div *ngIf="showRetrySkip && feedback && feedback !== 'Correct!'" class="retry-skip-btns">
+      <button (click)="retryGuess()">Retry</button>
+      <button (click)="skipPokemon()">Skip</button>
+    </div>
     <button (click)="nextPokemon()" *ngIf="feedback === 'Correct!'">Next</button>
   </div>
 </div>
