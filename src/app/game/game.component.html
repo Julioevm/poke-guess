@@ -50,6 +50,10 @@
         >Retry</button>
       </div>
     </form>
+    <!-- Show missing letters under letter blocks on easy difficulty -->
+    <div *ngIf="difficulty === 'easy' && missingLetters.length" class="missing-letters">
+      <span *ngFor="let letter of missingLetters" class="missing-letter">{{ letter }}</span>
+    </div>
     <div class="feedback" [class.correct]="feedback === 'Correct!'" [class.wrong]="feedback && feedback !== 'Correct!'">{{ feedback }}</div>
   </div>
 </div>

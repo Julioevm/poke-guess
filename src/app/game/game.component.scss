@@ -167,3 +167,23 @@ button[type="submit"]:disabled {
   background: #ccc;
   cursor: not-allowed;
 }
+
+/* Style for missing letters under blocks */
+.missing-letters {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.7rem 0 0.2rem 0;
+}
+.missing-letter {
+  background: #ede7f6;
+  color: #6a1b9a;
+  border-radius: 1rem;
+  padding: 0.25rem 0.7rem;
+  font-weight: 600;
+  font-size: 1.1rem;
+  letter-spacing: 0.05em;
+  border: 1px solid #b39ddb;
+  box-shadow: 0 1px 4px 0 rgba(138,43,226,0.07);
+  text-transform: uppercase;
+}

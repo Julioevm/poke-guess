@@ -196,4 +196,24 @@ export class GameComponent {
     // For very-hard: apply CSS filter in template
     return this.currentPokemon?.sprite || '';
   }
+
+  // Returns the missing letters (not shown in blocks), shuffled, for easy difficulty
+  get missingLetters(): string[] {
+    if (this.difficulty !== 'easy' || !this.currentPokemon) return [];
+    const name = this.currentPokemon.name.toUpperCase();
+    // Letters shown in blocks (clueArray)
+    const shown = this.clueArray
+      .map((c, i) => c ? name[i] : null)
+      .filter(c => c !== null) as string[];
+    // Unique letters in name
+    const uniqueLetters = Array.from(new Set(name.split('')));
+    // Filter out those already shown
+    const missing = uniqueLetters.filter(l => !shown.includes(l));
+    // Shuffle
+    for (let i = missing.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [missing[i], missing[j]] = [missing[j], missing[i]];
+    }
+    return missing;
+  }
 }
