@@ -1,5 +1,5 @@
 [build]
-  command = "ng build"
+  command = "npx ng build --configuration=production"
   publish = "dist/poke-guess/browser"
 
 [context.production.environment]
