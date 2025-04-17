@@ -73,7 +73,7 @@ export class GameComponent {
     if (!this.currentPokemon) return '';
     const name = this.currentPokemon.name;
     if (this.difficulty === 'easy') {
-      return name.length <= 4 ? name[0] : name.slice(0, 3) + '*'.repeat(name.length - 3);
+      return name.length <= 4 ? name[0] + '*'.repeat(name.length - 1) : name.slice(0, 3) + '*'.repeat(name.length - 3);
     } else if (this.difficulty === 'medium') {
       return name[0] + '*'.repeat(name.length - 1);
     } else  {
