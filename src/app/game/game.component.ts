@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { PokemonService, Pokemon } from '../pokemon.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import confetti from 'canvas-confetti';
 
 export type Difficulty = 'easy' | 'medium' | 'hard' | 'very-hard';
 
@@ -100,6 +101,11 @@ export class GameComponent {
     const guessStr = this.guessLetters.join('').toLowerCase();
     if (guessStr === this.currentPokemon.name.toLowerCase()) {
       this.feedback = 'Correct!';
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
       setTimeout(() => this.nextPokemon(), 1000);
     } else {
       this.feedback = 'Try again!';
