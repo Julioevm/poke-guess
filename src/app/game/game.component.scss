@@ -1,0 +1,111 @@
+.game-container {
+  max-width: 420px;
+  margin: 2rem auto;
+  background: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 2px 24px 0 rgba(0,0,0,0.08);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.controls {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.controls label {
+  font-weight: 600;
+  margin-right: 0.5rem;
+}
+.controls button {
+  margin-right: 0.5rem;
+  border: none;
+  background: #ececec;
+  color: #222;
+  padding: 0.4rem 1rem;
+  border-radius: 1.5rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+.controls button.active {
+  background: #8e24aa;
+  color: #fff;
+}
+.controls select {
+  padding: 0.3rem 0.7rem;
+  border-radius: 0.5rem;
+  border: 1px solid #bbb;
+}
+.sprite-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+  min-height: 120px;
+}
+.sprite-wrapper img {
+  width: 120px;
+  height: 120px;
+  image-rendering: pixelated;
+  background: #f7f7f7;
+  border-radius: 50%;
+  box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
+}
+.sprite-wrapper img.shaded {
+  filter: grayscale(1) brightness(0.2) contrast(2) blur(2px);
+}
+.clue {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #8e24aa;
+  font-weight: 600;
+}
+form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+input[type="text"] {
+  flex: 1 1 0;
+  padding: 0.5rem 1rem;
+  border-radius: 1.5rem;
+  border: 1px solid #bbb;
+  font-size: 1rem;
+}
+button[type="submit"] {
+  background: #8e24aa;
+  color: #fff;
+  border: none;
+  border-radius: 1.5rem;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+button[type="submit"]:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+.feedback {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  min-height: 1.3rem;
+}
+.feedback.correct {
+  color: #388e3c;
+}
+.feedback.wrong {
+  color: #e53935;
+}
+.loading {
+  color: #8e24aa;
+  font-weight: 600;
+  text-align: center;
+  margin: 2rem 0;
+}

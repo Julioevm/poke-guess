@@ -1,0 +1,30 @@
+<div class="game-container">
+  <div class="controls">
+    <label>Difficulty:</label>
+    <button *ngFor="let diff of ['easy','medium','hard','very-hard']"
+            [class.active]="difficulty === diff"
+            (click)="setDifficulty(diff)">
+      {{ diff.replace('-', ' ').toUpperCase() }}
+    </button>
+    <label>Generation:</label>
+    <select [(ngModel)]="generation" (change)="setGeneration(generation)">
+      <option *ngFor="let gen of availableGens" [value]="gen">Gen {{ gen }}</option>
+    </select>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading Pokémon...</div>
+  <div *ngIf="!loading && currentPokemon" class="pokemon-area">
+    <div class="sprite-wrapper">
+      <img [src]="currentPokemon.sprite"
+           [alt]="'Pokemon silhouette'"
+           [class.shaded]="difficulty === 'very-hard'">
+    </div>
+    <div class="clue" *ngIf="getClue()">Clue: <span>{{ getClue() }}</span></div>
+    <form (ngSubmit)="submitGuess()" autocomplete="off">
+      <input type="text" [(ngModel)]="guess" name="guess" placeholder="Enter Pokémon name" [disabled]="!!feedback" autocomplete="off">
+      <button type="submit" [disabled]="!!feedback">Guess</button>
+    </form>
+    <div class="feedback" [class.correct]="feedback === 'Correct!'" [class.wrong]="feedback && feedback !== 'Correct!'">{{ feedback }}</div>
+    <button (click)="nextPokemon()" *ngIf="feedback === 'Correct!'">Next</button>
+  </div>
+</div>
