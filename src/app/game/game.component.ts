@@ -22,6 +22,7 @@ export class GameComponent {
   guess: string = '';
   feedback: string = '';
   loading = false;
+  guessLetters: string[] = [];
 
   constructor(private pokeService: PokemonService) {
     this.loadPokemonList();
@@ -40,6 +41,15 @@ export class GameComponent {
     this.currentPokemon = this.pokemonList[idx];
     this.guess = '';
     this.feedback = '';
+    // Reset guessLetters
+    if (this.currentPokemon) {
+      this.guessLetters = Array(this.currentPokemon.name.length).fill('');
+      // Pre-fill revealed letters from clue
+      const clueArr = this.clueArray;
+      clueArr.forEach((letter, i) => {
+        if (letter) this.guessLetters[i] = letter.toUpperCase();
+      });
+    }
   }
 
   setDifficulty(diff: string) {
@@ -66,9 +76,29 @@ export class GameComponent {
     }
   }
 
+  // Helper to convert clue to an array for block rendering
+  get clueArray(): (string|null)[] {
+    if (!this.currentPokemon) return [];
+    const clue = this.getClue();
+    return this.currentPokemon.name.split('').map((char, i) => clue[i] !== '*' ? char : null);
+  }
+
+  // Called when a letter input changes
+  onLetterChange(idx: number, event: Event) {
+    const input = event.target as HTMLInputElement;
+    const val = input.value.toUpperCase().replace(/[^A-Z]/g, '');
+    this.guessLetters[idx] = val;
+    // Move to next input if filled
+    if (val && input.nextElementSibling) {
+      (input.nextElementSibling as HTMLInputElement).focus();
+    }
+  }
+
+  // Update submitGuess to use guessLetters
   async submitGuess() {
     if (!this.currentPokemon) return;
-    if (this.guess.trim().toLowerCase() === this.currentPokemon.name.toLowerCase()) {
+    const guessStr = this.guessLetters.join('').toLowerCase();
+    if (guessStr === this.currentPokemon.name.toLowerCase()) {
       this.feedback = 'Correct!';
       setTimeout(() => this.nextPokemon(), 1000);
     } else {

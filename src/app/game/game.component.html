@@ -20,8 +20,21 @@
            [class.shaded]="difficulty === 'very-hard'">
     </div>
     <div class="clue" *ngIf="getClue()">Clue: <span>{{ getClue() }}</span></div>
-    <form (ngSubmit)="submitGuess()" autocomplete="off">
-      <input type="text" [(ngModel)]="guess" name="guess" placeholder="Enter Pokémon name" [disabled]="!!feedback" autocomplete="off">
+    <form (ngSubmit)="submitGuess()" autocomplete="off" class="guess-blocks-form">
+      <div class="guess-blocks">
+        <input *ngFor="let clueLetter of clueArray; let i = index"
+               maxlength="1"
+               [value]="guessLetters[i]"
+               [readonly]="clueLetter"
+               [disabled]="!!feedback"
+               (input)="onLetterChange(i, $event)"
+               [class.revealed]="clueLetter"
+               [class.filled]="guessLetters[i] && !clueLetter"
+               autocomplete="off"
+               type="text"
+               pattern="[A-Za-z]"
+               />
+      </div>
       <button type="submit" [disabled]="!!feedback">Guess</button>
     </form>
     <div class="feedback" [class.correct]="feedback === 'Correct!'" [class.wrong]="feedback && feedback !== 'Correct!'">{{ feedback }}</div>

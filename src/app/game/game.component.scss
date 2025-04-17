@@ -109,3 +109,44 @@ button[type="submit"]:disabled {
   text-align: center;
   margin: 2rem 0;
 }
+.guess-blocks {
+  display: flex;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  justify-content: center;
+}
+.guess-blocks input[type="text"] {
+  width: 2.2rem;
+  height: 2.2rem;
+  font-size: 1.4rem;
+  text-align: center;
+  border: 2px solid #bbb;
+  border-radius: 0.4rem;
+  background: #f7f7f7;
+  text-transform: uppercase;
+  transition: border 0.2s, background 0.2s;
+}
+.guess-blocks input[type="text"].revealed {
+  background: #e1bee7;
+  color: #6a1b9a;
+  border-color: #8e24aa;
+  font-weight: bold;
+}
+.guess-blocks input[type="text"].filled:not(.revealed) {
+  border-color: #8e24aa;
+  background: #ede7f6;
+}
+.guess-blocks input[type="text"]:disabled {
+  background: #eee;
+  color: #aaa;
+  border-color: #ccc;
+}
+.guess-blocks-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+.guess-blocks-form button[type="submit"] {
+  margin-top: 0.5rem;
+}
