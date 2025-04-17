@@ -54,7 +54,9 @@
   box-shadow: 0 2px 12px 0 rgba(0,0,0,0.10);
 }
 .sprite-wrapper img.shaded {
-  filter: grayscale(1) brightness(0.2) contrast(2) blur(2px);
+  background: unset;
+  -webkit-filter: brightness(0);
+    filter: brightness(0);
 }
 
 form {
