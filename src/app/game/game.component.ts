@@ -95,6 +95,29 @@ export class GameComponent {
     }
   }
 
+  // Handle backspace to move focus to previous block unless it's a clue
+  onLetterKeyDown(idx: number, event: KeyboardEvent) {
+    const input = event.target as HTMLInputElement;
+    if (event.key === 'Backspace') {
+      // If current input is empty or will be cleared
+      if (!this.guessLetters[idx] || input.selectionStart === 0) {
+        // Find previous editable (non-clue) input
+        let prevIdx = idx - 1;
+        while (prevIdx >= 0 && this.clueArray[prevIdx]) {
+          prevIdx--;
+        }
+        if (prevIdx >= 0) {
+          event.preventDefault();
+          const prevInput = input.parentElement?.children[prevIdx] as HTMLInputElement;
+          if (prevInput) {
+            prevInput.focus();
+            prevInput.select();
+          }
+        }
+      }
+    }
+  }
+
   // Update submitGuess to use guessLetters
   async submitGuess() {
     if (!this.currentPokemon) return;

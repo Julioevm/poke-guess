@@ -19,7 +19,6 @@
            [alt]="'Pokemon silhouette'"
            [class.shaded]="difficulty === 'very-hard'">
     </div>
-    <div class="clue" *ngIf="getClue()">Clue: <span>{{ getClue() }}</span></div>
     <form (ngSubmit)="submitGuess()" autocomplete="off" class="guess-blocks-form">
       <div class="guess-blocks">
         <input *ngFor="let clueLetter of clueArray; let i = index"
@@ -28,6 +27,7 @@
                [readonly]="clueLetter"
                [disabled]="!!feedback"
                (input)="onLetterChange(i, $event)"
+               (keydown)="onLetterKeyDown(i, $event)"
                [class.revealed]="clueLetter"
                [class.filled]="guessLetters[i] && !clueLetter"
                autocomplete="off"
