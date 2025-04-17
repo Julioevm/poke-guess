@@ -51,6 +51,5 @@
       </div>
     </form>
     <div class="feedback" [class.correct]="feedback === 'Correct!'" [class.wrong]="feedback && feedback !== 'Correct!'">{{ feedback }}</div>
-    <button (click)="nextPokemon()" *ngIf="feedback === 'Correct!'">Next</button>
   </div>
 </div>

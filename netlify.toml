@@ -1,0 +1,6 @@
+[build]
+  command = "ng build --configuration=production"
+  publish = "dist/poke-guess"
+
+[context.production.environment]
+  NODE_ENV = "production"
