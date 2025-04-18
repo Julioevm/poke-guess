@@ -57,6 +57,10 @@ export class GameComponent {
       const firstInput = document.querySelector('.guess-blocks input:not([readonly])') as HTMLInputElement;
       if (firstInput) firstInput.focus();
     }, 0);
+    if (this.difficulty === 'very-hard') {
+      const pokemonImage = document.querySelector('.sprite-wrapper img') as HTMLImageElement;
+      pokemonImage.classList.add('shaded');
+    }
   }
 
   setDifficulty(diff: string) {
@@ -113,6 +117,11 @@ export class GameComponent {
     if (!this.currentPokemon) return;
     const guessStr = this.guessLetters.join('').toLowerCase();
     if (guessStr === this.currentPokemon.name.toLowerCase()) {
+      if (this.difficulty === 'very-hard') {
+        const pokemonImage = document.querySelector('.sprite-wrapper img') as HTMLImageElement;
+        pokemonImage.classList.remove('shaded');
+      }
+
       this.feedback = 'Correct!';
       confetti({
         particleCount: 100,
