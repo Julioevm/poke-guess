@@ -1,4 +1,9 @@
 <div class="game-container">
+  <div class="score-bar">
+    <span class="score-label">Score:</span>
+    <span class="score-value">{{ score }}</span>
+    <span *ngIf="!loading && currentPokemon" class="round-points">(+{{ hasRetried ? (roundPossiblePoints / 2 | number:'1.0-0') : roundPossiblePoints }} pts this round)</span>
+  </div>
   <div class="controls">
     <label>Difficulty:</label>
     <button *ngFor="let diff of ['easy','medium','hard','very-hard']"

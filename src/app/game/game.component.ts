@@ -25,6 +25,9 @@ export class GameComponent {
   loading = false;
   guessLetters: string[] = [];
   showRetrySkip = false;
+  score: number = 0;
+  roundPossiblePoints: number = 0;
+  hasRetried: boolean = false;
 
   constructor(private pokeService: PokemonService) {
     this.loadPokemonList();
@@ -43,6 +46,7 @@ export class GameComponent {
     this.currentPokemon = this.pokemonList[idx];
     this.guess = '';
     this.feedback = '';
+    this.hasRetried = false;
     // Reset guessLetters
     if (this.currentPokemon) {
       this.guessLetters = Array(this.currentPokemon.name.length).fill('');
@@ -51,6 +55,8 @@ export class GameComponent {
       clueArr.forEach((letter, i) => {
         if (letter) this.guessLetters[i] = letter.toUpperCase();
       });
+      // Set possible points for this round
+      this.roundPossiblePoints = this.calculatePoints(this.currentPokemon.name.length, this.difficulty);
     }
     // Auto-focus first editable input after DOM updates
     setTimeout(() => {
@@ -121,8 +127,13 @@ export class GameComponent {
         const pokemonImage = document.querySelector('.sprite-wrapper img') as HTMLImageElement;
         pokemonImage.classList.remove('shaded');
       }
-
       this.feedback = 'Correct!';
+      // Award points
+      let earned = this.roundPossiblePoints;
+      if (this.hasRetried) {
+        earned = Math.floor(earned / 2);
+      }
+      this.score += earned;
       confetti({
         particleCount: 100,
         spread: 70,
@@ -168,6 +179,7 @@ export class GameComponent {
     this.guessLetters = this.guessLetters.map((letter, i) => this.clueArray[i] ? letter : '');
     this.feedback = '';
     this.showRetrySkip = false;
+    this.hasRetried = true;
     // Focus first editable input
     setTimeout(() => {
       const firstInput = document.querySelector('.guess-blocks input:not([readonly])') as HTMLInputElement;
@@ -187,6 +199,12 @@ export class GameComponent {
     const guessStr = this.guessLetters.join('').toLowerCase();
     if (guessStr === this.currentPokemon.name.toLowerCase()) {
       this.feedback = 'Correct!';
+      // Award points
+      let earned = this.roundPossiblePoints;
+      if (this.hasRetried) {
+        earned = Math.floor(earned / 2);
+      }
+      this.score += earned;
       confetti({
         particleCount: 100,
         spread: 70,
@@ -222,5 +240,15 @@ export class GameComponent {
       [missing[i], missing[j]] = [missing[j], missing[i]];
     }
     return missing;
+  }
+
+  calculatePoints(nameLength: number, difficulty: Difficulty): number {
+    const multipliers: { [key in Difficulty]: number } = {
+      'easy': 5,
+      'medium': 10,
+      'hard': 15,
+      'very-hard': 20
+    };
+    return nameLength * multipliers[difficulty];
   }
 }
