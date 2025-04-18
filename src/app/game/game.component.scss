@@ -110,6 +110,7 @@ button[type="submit"]:disabled {
   gap: 0.4rem;
   margin-bottom: 1rem;
   justify-content: center;
+  flex-wrap: wrap;
 }
 .guess-blocks input[type="text"] {
   width: 2.2rem;
@@ -121,6 +122,13 @@ button[type="submit"]:disabled {
   background: #f7f7f7;
   text-transform: uppercase;
   transition: border 0.2s, background 0.2s;
+  @media (max-width: 450px) {
+    width: 1.8rem;
+    max-width: 1.8rem;
+    height: 1.8rem;
+    font-size: 1.2rem;
+  }
+
 }
 .guess-blocks input[type="text"].revealed {
   background: #e1bee7;
