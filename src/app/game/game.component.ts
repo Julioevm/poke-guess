@@ -49,14 +49,14 @@ export class GameComponent {
     this.hasRetried = false;
     // Reset guessLetters
     if (this.currentPokemon) {
-      this.guessLetters = Array(this.currentPokemon.name.length).fill('');
+      this.guessLetters = Array(this.getCleanPokemonName(this.currentPokemon).length).fill('');
       // Pre-fill revealed letters from clue
       const clueArr = this.clueArray;
       clueArr.forEach((letter, i) => {
         if (letter) this.guessLetters[i] = letter.toUpperCase();
       });
       // Set possible points for this round
-      this.roundPossiblePoints = this.calculatePoints(this.currentPokemon.name.length, this.difficulty);
+      this.roundPossiblePoints = this.calculatePoints(this.getCleanPokemonName(this.currentPokemon).length, this.difficulty);
     }
     // Auto-focus first editable input after DOM updates
     setTimeout(() => {
@@ -81,7 +81,7 @@ export class GameComponent {
 
   getClue(): string {
     if (!this.currentPokemon) return '';
-    const name = this.currentPokemon.name;
+    const name = this.getCleanPokemonName(this.currentPokemon);
     if (this.difficulty === 'easy') {
       return name.length <= 4 ? name[0] + '*'.repeat(name.length - 1) : name.slice(0, 3) + '*'.repeat(name.length - 3);
     } else if (this.difficulty === 'medium') {
@@ -95,7 +95,7 @@ export class GameComponent {
   get clueArray(): (string|null)[] {
     if (!this.currentPokemon) return [];
     const clue = this.getClue();
-    return this.currentPokemon.name.split('').map((char, i) => clue[i] !== '*' ? char : null);
+    return this.getCleanPokemonName(this.currentPokemon).split('').map((char, i) => clue[i] !== '*' ? char : null);
   }
 
   // Called when a letter input changes
@@ -122,7 +122,7 @@ export class GameComponent {
   autoSubmitGuess() {
     if (!this.currentPokemon) return;
     const guessStr = this.guessLetters.join('').toLowerCase();
-    if (guessStr === this.currentPokemon.name.toLowerCase()) {
+    if (guessStr === this.getCleanPokemonName(this.currentPokemon).toLowerCase()) {
       if (this.difficulty === 'very-hard') {
         const pokemonImage = document.querySelector('.sprite-wrapper img') as HTMLImageElement;
         pokemonImage.classList.remove('shaded');
@@ -197,7 +197,7 @@ export class GameComponent {
   async submitGuess() {
     if (!this.currentPokemon) return;
     const guessStr = this.guessLetters.join('').toLowerCase();
-    if (guessStr === this.currentPokemon.name.toLowerCase()) {
+    if (guessStr === this.getCleanPokemonName(this.currentPokemon).toLowerCase()) {
       this.feedback = 'Correct!';
       // Award points
       let earned = this.roundPossiblePoints;
@@ -217,15 +217,10 @@ export class GameComponent {
     }
   }
 
-  getShadedSprite(): string {
-    // For very-hard: apply CSS filter in template
-    return this.currentPokemon?.sprite || '';
-  }
-
   // Returns the missing letters (not shown in blocks), shuffled, for easy difficulty
   get missingLetters(): string[] {
     if (this.difficulty !== 'easy' || !this.currentPokemon) return [];
-    const name = this.currentPokemon.name.toUpperCase();
+    const name = this.getCleanPokemonName(this.currentPokemon).toUpperCase();
     // Letters shown in blocks (clueArray)
     const shown = this.clueArray
       .map((c, i) => c ? name[i] : null)
@@ -250,5 +245,14 @@ export class GameComponent {
       'very-hard': 20
     };
     return nameLength * multipliers[difficulty];
+  }
+
+  getCleanPokemonName(pokemon: Pokemon): string {
+    // Handle nidoran gender variants
+    if (pokemon.name === 'nidoranf' || pokemon.name === 'nidoranm') {
+      return 'nidoran';
+    }
+    // Remove special characters and spaces
+    return pokemon.name.replace(/[^a-zA-Z0-9]/g, '');
   }
 }
