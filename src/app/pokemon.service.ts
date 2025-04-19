@@ -24,19 +24,19 @@ export class PokemonService {
     };
   }
 
-  async getPokemonListByGen(gen: number): Promise<Pokemon[]> {
-    const res = await axios.get(`${this.pokeApi}/generation/${gen}`);
-    const pokes = res.data.pokemon_species;
-    return Promise.all(
-      pokes.map(async (p: any) => {
-        const pokeRes = await axios.get(p.url.replace('-species', ''));
-        return {
-          id: pokeRes.data.id,
-          name: pokeRes.data.name,
-          sprite: pokeRes.data.sprites.front_default,
-          generation: gen
-        };
-      })
-    );
+  // Fetches only the IDs of Pokemon for a given generation
+  async getPokemonIdsByGen(gen: number): Promise<number[]> {
+    try {
+      const res = await axios.get(`${this.pokeApi}/generation/${gen}`);
+      const speciesList = res.data.pokemon_species;
+      const ids = speciesList.map((species: any) => {
+        const idMatch = species.url.match(/\/pokemon-species\/(\d+)\/?$/);
+        return idMatch ? parseInt(idMatch[1], 10) : null;
+      }).filter((id: number | null): id is number => id !== null);
+      return ids;
+    } catch (error) {
+      console.error(`Error fetching Pokemon IDs for generation ${gen}:`, error);
+      return []; // Return empty array on error
+    }
   }
 }
